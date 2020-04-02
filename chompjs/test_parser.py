@@ -2,8 +2,9 @@
 from __future__ import unicode_literals
 
 import unittest
-from chompjs import parse_js_object
+from os import path
 
+from chompjs import parse_js_object
 
 class TestParser(unittest.TestCase):
     def test_one_field_dict(self):
@@ -114,6 +115,12 @@ class TestParser(unittest.TestCase):
     def test_before_text(self):
         result = parse_js_object('var test = {"a": {"b": [12, 13, 14]}}')
         self.assertEqual(result, {"a": {"b": [12, 13, 14]}})
+
+    def test_incorrect_escape(self):
+        with open(path.join('chompjs', 'test_samples', 'invalid_escape')) as f:
+            result = parse_js_object(f.read())
+        self.assertEqual(len(result), 14)
+
 
 
 class TestParserExceptions(unittest.TestCase):
